@@ -3,16 +3,16 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:universal_html/html.dart' as uni_html;
 
 import '../pod_player.dart';
 import 'controllers/pod_getx_video_controller.dart';
 import 'utils/logger.dart';
+import 'widgets/animated_play_pause_icon.dart';
 import 'widgets/double_tap_icon.dart';
 import 'widgets/material_icon_button.dart';
-
-part 'widgets/animated_play_pause_icon.dart';
 
 part 'widgets/core/overlays/mobile_bottomsheet.dart';
 
@@ -20,17 +20,12 @@ part 'widgets/core/overlays/mobile_overlay.dart';
 
 part 'widgets/core/overlays/overlays.dart';
 
-part 'widgets/core/overlays/web_dropdown_menu.dart';
-
-part 'widgets/core/overlays/web_overlay.dart';
-
 part 'widgets/core/pod_core_player.dart';
-
-part 'widgets/core/video_gesture_detector.dart';
 
 part 'widgets/full_screen_view.dart';
 
 class PodVideoPlayer extends StatefulWidget {
+  final bool hideControls;
   final PodPlayerController controller;
   final double frameAspectRatio;
   final double videoAspectRatio;
@@ -57,10 +52,11 @@ class PodVideoPlayer extends StatefulWidget {
 
   PodVideoPlayer({
     required this.controller,
+    this.hideControls = false,
     super.key,
     this.frameAspectRatio = 16 / 9,
     this.videoAspectRatio = 16 / 9,
-    this.alwaysShowProgressBar = true,
+    this.alwaysShowProgressBar = false,
     this.podProgressBarConfig = const PodProgressBarConfig(),
     this.podPlayerLabels = const PodPlayerLabels(),
     this.overlayBuilder,
@@ -97,8 +93,7 @@ class PodVideoPlayer extends StatefulWidget {
   State<PodVideoPlayer> createState() => _PodVideoPlayerState();
 }
 
-class _PodVideoPlayerState extends State<PodVideoPlayer>
-    with TickerProviderStateMixin {
+class _PodVideoPlayerState extends State<PodVideoPlayer> with TickerProviderStateMixin {
   late PodGetXVideoController _podCtr;
 
   // late String tag;
@@ -253,6 +248,7 @@ class _PodVideoPlayerState extends State<PodVideoPlayer>
         builder: (podCtr) {
           if (podCtr.isFullScreen) return _thumbnailAndLoadingWidget();
           return _PodCoreVideoPlayer(
+            hideControls: widget.hideControls,
             videoPlayerCtr: podCtr.videoCtr!,
             videoAspectRatio: videoAspectRatio,
             tag: widget.controller.getTag,
@@ -261,6 +257,7 @@ class _PodVideoPlayerState extends State<PodVideoPlayer>
       );
     } else {
       return _PodCoreVideoPlayer(
+        hideControls: widget.hideControls,
         videoPlayerCtr: _podCtr.videoCtr!,
         videoAspectRatio: videoAspectRatio,
         tag: widget.controller.getTag,

@@ -4,12 +4,10 @@ class _PodCoreVideoPlayer extends StatelessWidget {
   final VideoPlayerController videoPlayerCtr;
   final double videoAspectRatio;
   final String tag;
+  final bool hideControls;
 
-  const _PodCoreVideoPlayer({
-    required this.videoPlayerCtr,
-    required this.videoAspectRatio,
-    required this.tag,
-  });
+  const _PodCoreVideoPlayer(
+      {required this.videoPlayerCtr, required this.videoAspectRatio, required this.tag, required this.hideControls});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +16,7 @@ class _PodCoreVideoPlayer extends StatelessWidget {
       builder: (ctrx) {
         return RawKeyboardListener(
           autofocus: true,
-          focusNode:
-              (podCtr.isFullScreen ? FocusNode() : podCtr.keyboardFocusWeb) ??
-                  FocusNode(),
+          focusNode: (podCtr.isFullScreen ? FocusNode() : podCtr.keyboardFocusWeb) ?? FocusNode(),
           onKey: (value) => podCtr.onKeyBoardEvents(
             event: value,
             appContext: ctrx,
@@ -46,8 +42,7 @@ class _PodCoreVideoPlayer extends StatelessWidget {
                       return const SizedBox();
                     }
 
-                    if (podCtr.podVideoState == PodVideoState.paused &&
-                        podCtr.videoPosition == Duration.zero) {
+                    if (podCtr.podVideoState == PodVideoState.paused && podCtr.videoPosition == Duration.zero) {
                       return SizedBox.expand(
                         child: TweenAnimationBuilder<double>(
                           builder: (context, value, child) => Opacity(
@@ -68,7 +63,10 @@ class _PodCoreVideoPlayer extends StatelessWidget {
                   },
                 ),
               ),
-              _VideoOverlays(tag: tag),
+              _VideoOverlays(
+                tag: tag,
+                hideControls: hideControls,
+              ),
               IgnorePointer(
                 child: GetBuilder<PodGetXVideoController>(
                   tag: tag,
@@ -132,16 +130,14 @@ class _PodCoreVideoPlayer extends StatelessWidget {
                       : GetBuilder<PodGetXVideoController>(
                           tag: tag,
                           id: 'overlay',
-                          builder: (podCtr) => podCtr.isOverlayVisible ||
-                                  !podCtr.alwaysShowProgressBar
+                          builder: (podCtr) => podCtr.isOverlayVisible || !podCtr.alwaysShowProgressBar
                               ? const SizedBox()
                               : Align(
                                   alignment: Alignment.bottomCenter,
                                   child: PodProgressBar(
                                     tag: tag,
                                     alignment: Alignment.bottomCenter,
-                                    podProgressBarConfig:
-                                        podCtr.podProgressBarConfig,
+                                    podProgressBarConfig: podCtr.podProgressBarConfig,
                                   ),
                                 ),
                         ),

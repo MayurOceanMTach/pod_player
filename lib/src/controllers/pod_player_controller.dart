@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/request/request.dart';
+import 'package:http/http.dart';
 import 'package:universal_html/html.dart' as uni_html;
 import 'package:wakelock_plus/wakelock_plus.dart';
 
@@ -13,6 +15,7 @@ import 'pod_getx_video_controller.dart';
 class PodPlayerController {
   late PodGetXVideoController _ctr;
   late String getTag;
+  final bool hideControls = false;
   bool _isCtrInitialised = false;
 
   Object? _initializationError;
@@ -185,8 +188,7 @@ class PodPlayerController {
       );
 
   //Change double tap duration
-  void setDoubeTapForwarDuration(int seconds) =>
-      _ctr.doubleTapForwardSeconds = seconds;
+  void setDoubeTapForwarDuration(int seconds) => _ctr.doubleTapForwardSeconds = seconds;
 
   ///Jumps to specific position of the video
   Future<void> videoSeekTo(Duration moment) async {
@@ -210,18 +212,18 @@ class PodPlayerController {
   }
 
   ///on right double tap
-  Future<void> doubleTapVideoForward(int seconds) async {
-    await _checkAndWaitTillInitialized();
-    if (!_isCtrInitialised) return;
-    return _ctr.onRightDoubleTap(seconds: seconds);
-  }
+  // Future<void> doubleTapVideoForward(int seconds) async {
+  //   await _checkAndWaitTillInitialized();
+  //   if (!_isCtrInitialised) return;
+  //   return _ctr.onRightDoubleTap(seconds: seconds);
+  // }
 
   ///on left double tap
-  Future<void> doubleTapVideoBackward(int seconds) async {
-    await _checkAndWaitTillInitialized();
-    if (!_isCtrInitialised) return;
-    return _ctr.onLeftDoubleTap(seconds: seconds);
-  }
+  // Future<void> doubleTapVideoBackward(int seconds) async {
+  //   await _checkAndWaitTillInitialized();
+  //   if (!_isCtrInitialised) return;
+  //   return _ctr.onLeftDoubleTap(seconds: seconds);
+  // }
 
   /// Enables video player to fullscreen mode.
   ///
@@ -229,7 +231,7 @@ class PodPlayerController {
   /// orientation by yourself.
   void enableFullScreen() {
     uni_html.document.documentElement?.requestFullscreen();
-    _ctr.enableFullScreen(getTag);
+    _ctr.enableFullScreen(getTag, hideControls);
   }
 
   /// Disables fullscreen mode.

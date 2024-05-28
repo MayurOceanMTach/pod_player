@@ -2,9 +2,10 @@ part of 'package:pod_player/src/pod_player.dart';
 
 class _VideoOverlays extends StatelessWidget {
   final String tag;
-
+  final bool hideControls;
   const _VideoOverlays({
     required this.tag,
+    required this.hideControls,
   });
 
   @override
@@ -46,17 +47,22 @@ class _VideoOverlays extends StatelessWidget {
         tag: tag,
         id: 'overlay',
         builder: (podCtr) {
-          return AnimatedOpacity(
-            duration: const Duration(milliseconds: 200),
-            opacity: podCtr.isOverlayVisible ? 1 : 0,
-            child: Stack(
-              fit: StackFit.passthrough,
-              children: [
-                if (!kIsWeb) _MobileOverlay(tag: tag),
-                if (kIsWeb) _WebOverlay(tag: tag),
-              ],
-            ),
+          return _MobileOverlay(
+            tag: tag,
+            hideControl: hideControls,
           );
+          // return AnimatedOpacity(
+          //   duration: const Duration(milliseconds: 200),
+          //   opacity: podCtr.isOverlayVisible ? 1 : 0,
+          //   child: Stack(
+          //     fit: StackFit.passthrough,
+          //     children: [
+          //       if (!kIsWeb)
+
+          //      //if (kIsWeb) _WebOverlay(tag: tag),
+          //     ],
+          //   ),
+          // );
         },
       );
     }

@@ -69,8 +69,7 @@ class PodGetXVideoController extends _PodGesturesController {
 
       update(['update-all']);
       // ignore: unawaited_futures
-      Future<void>.delayed(const Duration(milliseconds: 600))
-          .then((_) => _isWebAutoPlayDone = true);
+      Future<void>.delayed(const Duration(milliseconds: 600)).then((_) => _isWebAutoPlayDone = true);
     } catch (e) {
       podVideoStateChanger(PodVideoState.error);
       update(['errorState']);
@@ -215,16 +214,15 @@ class PodGetXVideoController extends _PodGesturesController {
         toggleMute();
         return;
       }
-      if (event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
-        onLeftDoubleTap();
-        return;
-      }
-      if (event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
-        onRightDoubleTap();
-        return;
-      }
-      if (event.isKeyPressed(LogicalKeyboardKey.keyF) &&
-          event.logicalKey.keyLabel == 'F') {
+      // if (event.isKeyPressed(LogicalKeyboardKey.arrowLeft)) {
+      //   onLeftDoubleTap();
+      //   return;
+      // }
+      // if (event.isKeyPressed(LogicalKeyboardKey.arrowRight)) {
+      //   onRightDoubleTap();
+      //   return;
+      // }
+      if (event.isKeyPressed(LogicalKeyboardKey.keyF) && event.logicalKey.keyLabel == 'F') {
         toggleFullScreenOnWeb(appContext, tag);
       }
       if (event.isKeyPressed(LogicalKeyboardKey.escape)) {
@@ -248,7 +246,7 @@ class PodGetXVideoController extends _PodGesturesController {
       }
     } else {
       uni_html.document.documentElement?.requestFullscreen();
-      enableFullScreen(tag);
+      enableFullScreen(tag, false);
     }
   }
 

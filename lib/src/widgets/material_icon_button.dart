@@ -9,7 +9,6 @@ class MaterialIconButton extends StatelessWidget {
     this.radius = 12,
     this.onPressed,
     this.onHover,
-    this.onTapDown,
   });
 
   final Color? color;
@@ -18,7 +17,7 @@ class MaterialIconButton extends StatelessWidget {
   final String toolTipMesg;
   final void Function()? onPressed;
   final void Function(bool)? onHover;
-  final void Function(TapDownDetails details)? onTapDown;
+  // final void Function(TapDownDetails details)? onTapDown;
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -31,7 +30,7 @@ class MaterialIconButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(radius * 4),
           onHover: onHover,
           onTap: onPressed,
-          onTapDown: onTapDown,
+          // onTapDown: onTapDown,
           child: Padding(
             padding: EdgeInsets.all(radius),
             child: IconTheme(

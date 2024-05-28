@@ -2,55 +2,54 @@ part of 'package:pod_player/src/pod_player.dart';
 
 class _MobileOverlay extends StatelessWidget {
   final String tag;
+  final bool hideControl;
 
   const _MobileOverlay({
     required this.tag,
+    required this.hideControl,
   });
 
   @override
   Widget build(BuildContext context) {
-    const overlayColor = Colors.black38;
+    //const overlayColor = Colors.black38;
     const itemColor = Colors.white;
     final podCtr = Get.find<PodGetXVideoController>(tag: tag);
     return Stack(
       alignment: Alignment.center,
       children: [
-        _VideoGestureDetector(
-          tag: tag,
-          child: ColoredBox(
-            color: overlayColor,
-            child: Row(
-              children: [
-                Expanded(
-                  child: DoubleTapIcon(
-                    tag: tag,
-                    isForward: false,
-                    height: double.maxFinite,
-                    onDoubleTap: _isRtl()
-                        ? podCtr.onRightDoubleTap
-                        : podCtr.onLeftDoubleTap,
-                  ),
-                ),
-                SizedBox(
-                  height: double.infinity,
-                  child: Center(
-                    child: _AnimatedPlayPauseIcon(tag: tag, size: 42),
-                  ),
-                ),
-                Expanded(
-                  child: DoubleTapIcon(
-                    isForward: true,
-                    tag: tag,
-                    height: double.maxFinite,
-                    onDoubleTap: _isRtl()
-                        ? podCtr.onLeftDoubleTap
-                        : podCtr.onRightDoubleTap,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        // _VideoGestureDetector(
+        //   tag: tag,
+        //   child: ColoredBox(
+        //     //  color: overlayColor,
+        //     color: Colors.transparent,
+        //     child: Row(
+        //       children: [
+        //         Expanded(
+        //           child: DoubleTapIcon(
+        //             tag: tag,
+        //             isForward: false,
+        //             height: double.maxFinite,
+        //           //  onDoubleTap: _isRtl() ? podCtr.onRightDoubleTap : podCtr.onLeftDoubleTap,
+        //           ),
+        //         ),
+        // SizedBox(
+        //   height: double.infinity,
+        //   child: Center(
+        //     child: AnimatedPlayPauseIcon(tag: tag, size: 42),
+        //   ),
+        // ),
+        //         Expanded(
+        //           child: DoubleTapIcon(
+        //             isForward: true,
+        //             tag: tag,
+        //             height: double.maxFinite,
+        //            // onDoubleTap: _isRtl() ? podCtr.onLeftDoubleTap : podCtr.onRightDoubleTap,
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
         Align(
           alignment: Alignment.topCenter,
           child: Row(
@@ -80,7 +79,10 @@ class _MobileOverlay extends StatelessWidget {
         ),
         Align(
           alignment: Alignment.bottomLeft,
-          child: _MobileOverlayBottomControlles(tag: tag),
+          child: _MobileOverlayBottomControlles(
+            tag: tag,
+            hideControls: hideControl,
+          ),
         ),
       ],
     );

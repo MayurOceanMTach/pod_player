@@ -38,8 +38,7 @@ class _PodVideoQualityController extends _PodVideoController {
   ) async {
     try {
       podVideoStateChanger(PodVideoState.loading);
-      final vimeoVideoUrls =
-          await VideoApis.getVimeoPrivateVideoQualityUrls(videoId, httpHeader);
+      final vimeoVideoUrls = await VideoApis.getVimeoPrivateVideoQualityUrls(videoId, httpHeader);
 
       ///
       vimeoOrVideoUrls = vimeoVideoUrls ?? [];
@@ -108,8 +107,7 @@ class _PodVideoQualityController extends _PodVideoController {
     String youtubeIdOrUrl,
     bool live,
   ) async {
-    return await VideoApis.getYoutubeVideoQualityUrls(youtubeIdOrUrl, live) ??
-        [];
+    return await VideoApis.getYoutubeVideoQualityUrls(youtubeIdOrUrl, live) ?? [];
   }
 
   Future<void> changeVideoQuality(int? quality) async {
@@ -117,10 +115,7 @@ class _PodVideoQualityController extends _PodVideoController {
       throw Exception('videoQuality cannot be empty');
     }
     if (vimeoPlayingVideoQuality != quality) {
-      _videoQualityUrl = vimeoOrVideoUrls
-          .where((element) => element.quality == quality)
-          .first
-          .url;
+      _videoQualityUrl = vimeoOrVideoUrls.where((element) => element.quality == quality).first.url;
       podLog(_videoQualityUrl);
       vimeoPlayingVideoQuality = quality;
       _videoCtr?.removeListener(videoListner);

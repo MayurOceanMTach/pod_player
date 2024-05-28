@@ -1,13 +1,17 @@
-part of 'package:pod_player/src/pod_player.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class _VideoGestureDetector extends StatelessWidget {
+import '../../controllers/pod_getx_video_controller.dart';
+
+class VideoGestureDetector extends StatelessWidget {
   final Widget? child;
   final void Function()? onDoubleTap;
   final void Function()? onTap;
   final String tag;
 
-  const _VideoGestureDetector({
+  const VideoGestureDetector({
     required this.tag,
+    super.key,
     this.child,
     this.onDoubleTap,
     this.onTap,
@@ -17,11 +21,11 @@ class _VideoGestureDetector extends StatelessWidget {
   Widget build(BuildContext context) {
     final podCtr = Get.find<PodGetXVideoController>(tag: tag);
     return MouseRegion(
-      onHover: (event) => podCtr.onOverlayHover(),
-      onExit: (event) => podCtr.onOverlayHoverExit(),
+      // onHover: (event) => podCtr.onOverlayHover(),
+      // onExit: (event) => podCtr.onOverlayHoverExit(),
       child: GestureDetector(
         onTap: onTap ?? podCtr.toggleVideoOverlay,
-        onDoubleTap: onDoubleTap,
+        //  onDoubleTap: onDoubleTap,
         child: child,
       ),
     );

@@ -40,9 +40,7 @@ class _MobileBottomSheet extends StatelessWidget {
           _bottomSheetTiles(
             title: podCtr.podPlayerLabels.loopVideo,
             icon: Icons.loop_rounded,
-            subText: podCtr.isLooping
-                ? podCtr.podPlayerLabels.optionEnabled
-                : podCtr.podPlayerLabels.optionDisabled,
+            subText: podCtr.isLooping ? podCtr.podPlayerLabels.optionEnabled : podCtr.podPlayerLabels.optionDisabled,
             onTap: () {
               Navigator.of(context).pop();
               podCtr.toggleLooping();
@@ -180,10 +178,9 @@ class _VideoPlaybackSelectorMob extends StatelessWidget {
 
 class _MobileOverlayBottomControlles extends StatelessWidget {
   final String tag;
+  final bool hideControls;
 
-  const _MobileOverlayBottomControlles({
-    required this.tag,
-  });
+  const _MobileOverlayBottomControlles({required this.tag, required this.hideControls});
 
   @override
   Widget build(BuildContext context) {
@@ -196,82 +193,82 @@ class _MobileOverlayBottomControlles extends StatelessWidget {
       builder: (podCtr) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            children: [
-              const SizedBox(width: 12),
-              GetBuilder<PodGetXVideoController>(
-                tag: tag,
-                id: 'video-progress',
-                builder: (podCtr) {
-                  return Row(
-                    children: [
-                      Text(
-                        podCtr.calculateVideoDuration(podCtr.videoPosition),
-                        style: const TextStyle(color: itemColor),
-                      ),
-                      const Text(
-                        ' / ',
-                        style: durationTextStyle,
-                      ),
-                      Text(
-                        podCtr.calculateVideoDuration(podCtr.videoDuration),
-                        style: durationTextStyle,
-                      ),
-                    ],
-                  );
-                },
-              ),
-              const Spacer(),
-              MaterialIconButton(
-                toolTipMesg: podCtr.isFullScreen
-                    ? podCtr.podPlayerLabels.exitFullScreen ??
-                        'Exit full screen${kIsWeb ? ' (f)' : ''}'
-                    : podCtr.podPlayerLabels.fullscreen ??
-                        'Fullscreen${kIsWeb ? ' (f)' : ''}',
-                color: itemColor,
-                onPressed: () {
-                  if (podCtr.isOverlayVisible) {
-                    if (podCtr.isFullScreen) {
-                      podCtr.disableFullScreen(context, tag);
-                    } else {
-                      podCtr.enableFullScreen(tag);
-                    }
-                  } else {
-                    podCtr.toggleVideoOverlay();
-                  }
-                },
-                child: Icon(
-                  podCtr.isFullScreen
-                      ? Icons.fullscreen_exit
-                      : Icons.fullscreen,
+          if (!hideControls) ...[
+            Row(
+              children: [
+                const SizedBox(width: 12),
+                GetBuilder<PodGetXVideoController>(
+                  tag: tag,
+                  id: 'video-progress',
+                  builder: (podCtr) {
+                    return Row(
+                      children: [
+                        Text(
+                          podCtr.calculateVideoDuration(podCtr.videoPosition),
+                          style: const TextStyle(color: itemColor),
+                        ),
+                        const Text(
+                          ' / ',
+                          style: durationTextStyle,
+                        ),
+                        Text(
+                          podCtr.calculateVideoDuration(podCtr.videoDuration),
+                          style: durationTextStyle,
+                        ),
+                      ],
+                    );
+                  },
                 ),
-              ),
-            ],
-          ),
-          GetBuilder<PodGetXVideoController>(
-            tag: tag,
-            id: 'overlay',
-            builder: (podCtr) {
-              if (podCtr.isFullScreen) {
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 20),
-                  child: Visibility(
-                    visible: podCtr.isOverlayVisible,
-                    child: PodProgressBar(
-                      tag: tag,
-                      alignment: Alignment.topCenter,
-                      podProgressBarConfig: podCtr.podProgressBarConfig,
-                    ),
+                const Spacer(),
+                MaterialIconButton(
+                  toolTipMesg: podCtr.isFullScreen
+                      ? podCtr.podPlayerLabels.exitFullScreen ?? 'Exit full screen${kIsWeb ? ' (f)' : ''}'
+                      : podCtr.podPlayerLabels.fullscreen ?? 'Fullscreen${kIsWeb ? ' (f)' : ''}',
+                  color: itemColor,
+                  onPressed: () {
+                    if (podCtr.isOverlayVisible) {
+                      if (podCtr.isFullScreen) {
+                        podCtr.disableFullScreen(context, tag);
+                      } else {
+                        podCtr.enableFullScreen(tag, hideControls);
+                      }
+                    } else {
+                      podCtr.toggleVideoOverlay();
+                    }
+                  },
+                  child: Icon(
+                    podCtr.isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
                   ),
+                ),
+              ],
+            ),
+            GetBuilder<PodGetXVideoController>(
+              tag: tag,
+              id: 'overlay',
+              builder: (podCtr) {
+                if (podCtr.isFullScreen) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 20),
+                    child: Visibility(
+                      visible: podCtr.isOverlayVisible,
+                      child: PodProgressBar(
+                        tag: tag,
+                        alignment: Alignment.topCenter,
+                        podProgressBarConfig: podCtr.podProgressBarConfig,
+                      ),
+                    ),
+                  );
+                }
+                return PodProgressBar(
+                  tag: tag,
+                  alignment: Alignment.bottomCenter,
+                  podProgressBarConfig: podCtr.podProgressBarConfig,
                 );
-              }
-              return PodProgressBar(
-                tag: tag,
-                alignment: Alignment.bottomCenter,
-                podProgressBarConfig: podCtr.podProgressBarConfig,
-              );
-            },
-          ),
+              },
+            ),
+          ] else ...[
+            const SizedBox(),
+          ]
         ],
       ),
     );
